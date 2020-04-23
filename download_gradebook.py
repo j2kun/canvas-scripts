@@ -6,8 +6,7 @@ import os
 
 load_dotenv()
 
-# TODO: make this URL an environment variable
-API_URL = "https://clpccd.instructure.com/"
+API_URL = os.getenv("CANVAS_URL")
 API_KEY = os.getenv("CANVAS_TOKEN")
 
 if not API_KEY:
@@ -17,6 +16,7 @@ canvas = Canvas(API_URL, API_KEY)
 
 # TODO: Run the code below for every active course, and add the course name to the filename
 course_id = 16916
+
 course = canvas.get_course(course_id)
 
 print("Downloading gradebook for {}".format(course.name))
