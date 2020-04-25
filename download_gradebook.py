@@ -15,7 +15,8 @@ if not API_KEY:
 canvas = Canvas(API_URL, API_KEY)
 
 # TODO: Run the code below for every active course, and add the course name to the filename
-course_id = 16916
+#course_id = 16916  # Erin's course_id
+course_id = 10775   # Testing on Daniel's course
 
 course = canvas.get_course(course_id)
 
@@ -29,7 +30,7 @@ assignment_by_id = {a.id: a for a in assignments}
 
 for assignment in assignments:
     students = list(assignment.get_gradeable_students())
-    student_set |= set(students)
+    student_set |= set(students)    # Issue: this seems to include students that dropped midway in the class
 
     for submission in assignment.get_submissions():
         submission_by_id[(assignment.id, submission.user_id)] = submission
@@ -54,8 +55,13 @@ with open(filename, 'w', newline='') as csvfile:
     for student in sorted_students:
         scores = []
         for assignment in assignments:
-            score = submission_by_id[(assignment.id, student.id)].score
-            score = "" if score is None else str(score)
+            try:
+                # It's possible not every student made a submission here
+                score = submission_by_id[(assignment.id, student.id)].score
+                score = "" if score is None else str(score)
+            except KeyError:
+                score = ""
+            
             scores.append(score)
 
         writer.writerow([student.display_name] + scores)
