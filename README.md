@@ -25,3 +25,8 @@ Run
 ```bash
 python download_gradebook.py
 ```
+
+If it's your first time running this script, you will be asked to log in 
+to your Google account to authorize Google Drive Api to access and modify your Drive account.
+
+Run the script a second time after authorizing to upload the gradebook to your Drive.
