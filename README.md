@@ -16,8 +16,13 @@ Create a file called `.env`
 CANVAS_TOKEN="<add secret here>"
 ```
 
+Go to https://developers.google.com/drive/api/v3/quickstart/python
+and follow Step 1 to create a new Cloud Platform project and enable the Drive API.
 
-## Download all gradebooks
+Save the file credentials.json to your working directory. 
+
+
+## Download all gradebooks and upload each to your Drive account:
 
 Run
 
