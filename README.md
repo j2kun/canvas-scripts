@@ -17,8 +17,14 @@ CANVAS_URL="<Canvas url here>"
 CANVAS_TOKEN="<add secret here>"
 ```
 
+Go to https://developers.google.com/drive/api/v3/quickstart/python
 
-## Download all gradebooks
+Follow Step 1 to create a new Cloud Platform project and enable the Drive API.
+
+Save the file `credentials.json` to your working directory. 
+
+
+## Download all gradebooks and upload each to your Drive account:
 
 Run
 

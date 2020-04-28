@@ -3,6 +3,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 import csv
 import os
+from upload_to_drive import upload_csv
 
 load_dotenv()
 
@@ -15,7 +16,8 @@ if not API_KEY:
 canvas = Canvas(API_URL, API_KEY)
 
 # TODO: Run the code below for every active course, and add the course name to the filename
-course_id = 16916
+#course_id = 16916  # Erin's course_id
+course_id = 9558   # Testing on Daniel's course
 
 course = canvas.get_course(course_id)
 
@@ -29,7 +31,7 @@ assignment_by_id = {a.id: a for a in assignments}
 
 for assignment in assignments:
     students = list(assignment.get_gradeable_students())
-    student_set |= set(students)
+    student_set |= set(students)    # Issue: this seems to include students that dropped midway in the class
 
     for submission in assignment.get_submissions():
         submission_by_id[(assignment.id, submission.user_id)] = submission
@@ -45,7 +47,9 @@ def student_sort_key(student):
 sorted_students = sorted(students, key=student_sort_key)
 
 date = datetime.today().strftime('%Y-%m-%d')
+# TODO: Add course number, and semester/quarter to filename
 filename = 'gradebook_{}.csv'.format(date)
+
 with open(filename, 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['Student Name'] + [a.name for a in assignments])
@@ -54,11 +58,16 @@ with open(filename, 'w', newline='') as csvfile:
     for student in sorted_students:
         scores = []
         for assignment in assignments:
-            score = submission_by_id[(assignment.id, student.id)].score
-            score = "" if score is None else str(score)
+            try:
+                # It's possible not every student made a submission here
+                score = submission_by_id[(assignment.id, student.id)].score
+                score = "" if score is None else str(score)
+            except KeyError:
+                score = ""
+            
             scores.append(score)
 
         writer.writerow([student.display_name] + scores)
 
-
-# TODO: upload to Google drive
+# Upload to Google Drive
+upload_csv(filename)
