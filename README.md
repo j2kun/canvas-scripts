@@ -13,6 +13,7 @@ pip install -r requirements.txt
 Create a file called `.env`
 
 ```
+CANVAS_URL="<Canvas url here>"
 CANVAS_TOKEN="<add secret here>"
 ```
 
