@@ -4,16 +4,13 @@ import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
-
 from apiclient.http import MediaFileUpload
 
-# If modifying these scopes, delete the file token.pickle.
+
 SCOPES = ['https://www.googleapis.com/auth/drive']
 
-def main():
-    """Shows basic usage of the Drive v3 API.
-    Prints the names and ids of the first 10 files the user has access to.
-    """
+def upload_csv(filename):
+
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -37,16 +34,13 @@ def main():
 
     # Upload  the csv file 
     file_metadata = {
-        'name': 'gradebook',
+        'name': filename.replace(".csv", ""),
         'mimeType': 'application/vnd.google-apps.spreadsheet'
     }
-    media = MediaFileUpload('gradebook_2020-04-24.csv',
+    media = MediaFileUpload(filename,
                             mimetype='text/csv'
                             )
     file = service.files().create(body=file_metadata,
                                   media_body=media,
                                   fields='id').execute()
-    print('Your gradebook was uploaded!')
-  
-if __name__ == '__main__':
-    main()
+    print("{} was uploaded to Google Drive!".format(filename))

@@ -3,6 +3,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 import csv
 import os
+from upload_to_drive import upload_csv
 
 load_dotenv()
 
@@ -16,7 +17,7 @@ canvas = Canvas(API_URL, API_KEY)
 
 # TODO: Run the code below for every active course, and add the course name to the filename
 #course_id = 16916  # Erin's course_id
-course_id = 10775   # Testing on Daniel's course
+course_id = 9558   # Testing on Daniel's course
 
 course = canvas.get_course(course_id)
 
@@ -46,7 +47,9 @@ def student_sort_key(student):
 sorted_students = sorted(students, key=student_sort_key)
 
 date = datetime.today().strftime('%Y-%m-%d')
+# TODO: Add course number, and semester/quarter to filename
 filename = 'gradebook_{}.csv'.format(date)
+
 with open(filename, 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['Student Name'] + [a.name for a in assignments])
@@ -66,5 +69,5 @@ with open(filename, 'w', newline='') as csvfile:
 
         writer.writerow([student.display_name] + scores)
 
-
-# TODO: upload to Google drive
+# Upload to Google Drive
+upload_csv(filename)
